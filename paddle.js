@@ -1,10 +1,13 @@
-function Paddle(x, y, startRotation, swingRotation, speed) {
+function Paddle(x, y, startRotation, swingRotation, speed, mirrorX, mirrorY) {
   this.sprite = createSprite(x, y);
-  this.sprite.draw = function () { rect(0, 0, 100, 20) };
-  this.sprite.setCollider("rectangle", 0, 0, 100, 20);
+  // this.sprite.draw = function () { rect(0, 0, 100, 30) };
+  this.sprite.addImage(paddleImage);
+  this.sprite.mirrorX(mirrorX);
+  this.sprite.mirrorY(mirrorY);
+  this.sprite.setCollider("rectangle", 0, 0, 100, 30);
   this.sprite.rotation = startRotation;
   this.sprite.immovable = true;
-  this.sprite.debug = true;
+  // this.sprite.debug = true;
 
   this.swingRotation = swingRotation;
   this.startRotation = startRotation;
