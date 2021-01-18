@@ -40,4 +40,11 @@ Ball.prototype = {
       this.score = 999;
     }
   }
+
+  // resetball() {
+  //   this.sprite.x = width / 2;
+  //   this.sprite.y = 400;
+  //   this.sprite.setSpeed(0, 0);
+  //   this.score = 5;
+  // }
 }

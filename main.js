@@ -3,6 +3,7 @@
 let MAX_SPEED = 25, GRAVITY = 0.25;
 let leftScore = 0, rightScore = 0;
 let song;
+let state;
 
 // Runs once before setup()
 function preload() {
@@ -15,9 +16,12 @@ function preload() {
   paddleImage = loadImage('assets/paddle.png');
   wallImage = loadImage('assets/wall.png');
   ballImage = loadImage('assets/ball.png');
+  endScreenImage1 = loadImage('assets/p1Wins.png');
+  endScreenImage2 = loadImage('assets/p2Wins.png')
+
 
   soundFormats('mp3');
-  song = loadSound('assets/realpinball.mp3');
+  song = loadSound('assets/actualrealpinball.mp3');
 }
 
 // Runs once before draw()
@@ -25,6 +29,8 @@ function setup() {
   createCanvas(800, 450);
 
   song.loop();
+  
+  state = "playing" //used to tell when the game is over
 
   ball = new Ball();
 
@@ -86,6 +92,8 @@ function draw() {
 
   drawSprites();
 
+  
+
   // Score Display
   fill(254, 205, 26);
   textFont(pixelFont, 28);
@@ -95,6 +103,8 @@ function draw() {
   text(rightScore, width - 16, 40);
   textAlign(CENTER, CENTER);
   text(ball.score, width / 2, height / 2 - 4);
+
+  endScreen();
 }
 
 function keyPressed() {
@@ -113,6 +123,11 @@ function keyPressed() {
   if (key == 'm' || keyCode == RIGHT_ARROW || keyCode == DOWN_ARROW) {
     paddle4.sprite.rotationSpeed = paddle4.speed * paddle4.direction;
     paddle4.swinging = true;
+  }
+  if (key == 'y') {
+    if (state == "game over") {
+      resetgame();
+    }
   }
 }
 
@@ -133,8 +148,28 @@ function keyReleased() {
     paddle4.sprite.rotationSpeed = -paddle4.speed * paddle4.direction;
     paddle4.swinging = false;
   }
+  
+}
 
-  function endscreen() {
-    if (leftscore == )
+function endScreen() {
+  if (leftScore >= 999)  {
+    background(endScreenImage1); 
+    text("You win! Great Job!", 20, 10, 800, 90)
+    text("Press 'y' to restart.", 20, 80, 800, 600)
+    state = "game over"
+  } else if (rightScore >= 999) {
+    background(endScreenImage2); 
+    text("The AI won! Nice Try!", 20, 10, 800, 90)
+    text("Press 'y' to restart.", 20, 80, 800, 600)
+    state = "game over"
   }
+  
+}
+
+function resetgame() {
+  state = "playing"
+  leftScore = 0
+  rightScore = 0
+  background(bg); 
+  // ball.reset(); // doesn't work TODO make ball reset
 }
