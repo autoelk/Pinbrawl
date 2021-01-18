@@ -19,10 +19,16 @@ function Paddle(x, y, startRotation, swingRotation, direction, mirrorX, mirrorY)
   this.swinging = false;
   this.direction = direction;
   this.speed = 10;
+
+  // print(this.sprite.x + " " + this.sprite.y + " " + this.direction);
 }
 
 Paddle.prototype = {
   update() {
+    // apply extra force if the paddle is currently swinging outwards
+    if (ball.sprite.bounce(this.sprite) && this.swinging) {
+      ball.sprite.addSpeed(25, this.sprite.rotation - (90 * this.direction));
+    }
     // stop the swing from going past its bounds
     if (this.direction > 0) {
       if (this.sprite.rotation > this.swingRotation) {
@@ -44,16 +50,15 @@ Paddle.prototype = {
         this.sprite.rotationSpeed = 0;
       }
     }
-    // apply extra force if the paddle is currently swinging outwards
-    if (ball.sprite.bounce(this.sprite) && this.swinging) {
-      ball.sprite.addSpeed(25, this.sprite.rotation + 90 * this.direction);
+    if (this.sprite.rotationSpeed == 0) {
+      this.swinging = false;
     }
   },
   bot() {
     if (ball.sprite.overlap(this.detector)) {
       this.sprite.rotationSpeed = 2 / 3 * this.speed * this.direction + 2 * Math.random();
       this.swinging = true;
-    } else {
+    } else if (this.sprite.rotation != this.startRotation) {
       this.sprite.rotationSpeed = 2 / 3 * -this.speed * this.direction + 2 * Math.random();
       this.swinging = false;
     }

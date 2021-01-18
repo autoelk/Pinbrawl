@@ -30,8 +30,8 @@ function setup() {
 
   paddle1 = new Paddle(50, 150, -60, -120, -1, 1, -1);
   paddle2 = new Paddle(50, 300, 60, 120, 1, 1, 1);
-  paddle3 = new Paddle(750, 150, 60, 120, 1, -1, -1);
-  paddle4 = new Paddle(750, 300, -60, -120, -1, -1, 1);
+  paddle3 = new Paddle(750, 150, 240, 300, 1, 1, 1);
+  paddle4 = new Paddle(750, 300, -240, -300, -1, 1, -1);
 
   walls = new Group();
   walls_list = [
@@ -45,9 +45,9 @@ function setup() {
 
   obstacles = new Group();
   obstacles_list = [
-    new Obstacle(10, middleCircleImage, "circle", 400, 225, 50),
     new Obstacle(5, rectangleBumperImage, "rect", 250, 125, 50, 100, 50),
     new Obstacle(5, rectangleBumperImage, "rect", 550, 325, 50, 100, 50),
+    new Obstacle(10, middleCircleImage, "circle", 400, 225, 50),
     new Obstacle(5, smallCircleImage, "circle", 250, 325, 25),
     new Obstacle(5, smallCircleImage, "circle", 550, 125, 25),
     new Obstacle(25, sideCircleImage, "circle", 400, -10, 50),
@@ -60,6 +60,12 @@ function draw() {
   background(bg);
 
   ball.update();
+
+  // bot controls
+  //paddle1.bot();
+  //paddle2.bot();
+  paddle3.bot();
+  paddle4.bot();
 
   paddle1.update();
   paddle2.update();
@@ -77,11 +83,6 @@ function draw() {
     }
   })
 
-  // bot controls
-  // paddle1.bot();
-  // paddle2.bot();
-  paddle3.bot();
-  paddle4.bot();
 
   drawSprites();
 
@@ -103,15 +104,15 @@ function keyPressed() {
   }
   if (key == 'z' || key == 's' || key == 'd') {
     paddle2.sprite.rotationSpeed = paddle2.speed * paddle2.direction;
-    paddle1.swinging = true;
+    paddle2.swinging = true;
   }
   if (key == 'k' || keyCode == LEFT_ARROW || keyCode == UP_ARROW) {
     paddle3.sprite.rotationSpeed = paddle3.speed * paddle3.direction;
-    paddle1.swinging = true;
+    paddle3.swinging = true;
   }
   if (key == 'm' || keyCode == RIGHT_ARROW || keyCode == DOWN_ARROW) {
     paddle4.sprite.rotationSpeed = paddle4.speed * paddle4.direction;
-    paddle1.swinging = true;
+    paddle4.swinging = true;
   }
 }
 
@@ -121,15 +122,19 @@ function keyReleased() {
     paddle1.swinging = false;
   }
   if (key == 'z' || key == 's' || key == 'd') {
-    paddle2.sprite.rotationSpeed = -paddle2.speed * paddle1.direction;
+    paddle2.sprite.rotationSpeed = -paddle2.speed * paddle2.direction;
     paddle2.swinging = false;
   }
   if (key == 'k' || keyCode == LEFT_ARROW || keyCode == UP_ARROW) {
-    paddle3.sprite.rotationSpeed = -paddle3.speed * paddle1.direction;
+    paddle3.sprite.rotationSpeed = -paddle3.speed * paddle3.direction;
     paddle3.swinging = false;
   }
   if (key == 'm' || keyCode == RIGHT_ARROW || keyCode == DOWN_ARROW) {
-    paddle4.sprite.rotationSpeed = -paddle4.speed * paddle1.direction;
+    paddle4.sprite.rotationSpeed = -paddle4.speed * paddle4.direction;
     paddle4.swinging = false;
+  }
+
+  function endscreen() {
+    if (leftscore == )
   }
 }
