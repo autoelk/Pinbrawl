@@ -2,6 +2,7 @@
 
 let MAX_SPEED = 25, GRAVITY = 0.25;
 let leftScore = 0, rightScore = 0;
+let song;
 
 // Runs once before setup()
 function preload() {
@@ -14,18 +15,23 @@ function preload() {
   paddleImage = loadImage('assets/paddle.png');
   wallImage = loadImage('assets/wall.png');
   ballImage = loadImage('assets/ball.png');
+
+  soundFormats('mp3');
+  song = loadSound('assets/realpinball.mp3');
 }
 
 // Runs once before draw()
 function setup() {
   createCanvas(800, 450);
 
+  song.loop();
+
   ball = new Ball();
 
-  paddle1 = new Paddle(50, 150, -60, -120, -10, 1, -1);
-  paddle2 = new Paddle(50, 300, 60, 120, 10, 1, 1);
-  paddle3 = new Paddle(750, 150, 60, 120, 10, -1, -1);
-  paddle4 = new Paddle(750, 300, -60, -120, -10, -1, 1);
+  paddle1 = new Paddle(50, 150, -60, -120, -1, 1, -1);
+  paddle2 = new Paddle(50, 300, 60, 120, 1, 1, 1);
+  paddle3 = new Paddle(750, 150, 60, 120, 1, -1, -1);
+  paddle4 = new Paddle(750, 300, -60, -120, -1, -1, 1);
 
   walls = new Group();
   walls_list = [
@@ -71,19 +77,11 @@ function draw() {
     }
   })
 
-  // apply extra force if the paddle is currently swinging outwards
-  if (ball.sprite.bounce(paddle1.sprite) && paddle1.sprite.rotationSpeed == paddle1.speed) {
-    ball.sprite.addSpeed(25, paddle1.sprite.rotation + 90);
-  }
-  if (ball.sprite.bounce(paddle2.sprite) && paddle2.sprite.rotationSpeed == paddle2.speed) {
-    ball.sprite.addSpeed(25, paddle2.sprite.rotation - 90);
-  }
-  if (ball.sprite.bounce(paddle3.sprite) && paddle3.sprite.rotationSpeed == paddle3.speed) {
-    ball.sprite.addSpeed(25, paddle3.sprite.rotation + 90);
-  }
-  if (ball.sprite.bounce(paddle4.sprite) && paddle4.sprite.rotationSpeed == paddle4.speed) {
-    ball.sprite.addSpeed(25, paddle4.sprite.rotation - 90);
-  }
+  // bot controls
+  // paddle1.bot();
+  // paddle2.bot();
+  paddle3.bot();
+  paddle4.bot();
 
   drawSprites();
 
@@ -99,15 +97,39 @@ function draw() {
 }
 
 function keyPressed() {
-  if (key == 'a' || key == 'w') { paddle1.sprite.rotationSpeed = paddle1.speed; }
-  if (key == 'z' || key == 's' || key == 'd') { paddle2.sprite.rotationSpeed = paddle2.speed; }
-  if (key == 'k' || keyCode == LEFT_ARROW || keyCode == UP_ARROW) { paddle3.sprite.rotationSpeed = paddle3.speed; }
-  if (key == 'm' || keyCode == RIGHT_ARROW || keyCode == DOWN_ARROW) { paddle4.sprite.rotationSpeed = paddle4.speed; }
+  if (key == 'a' || key == 'w') {
+    paddle1.sprite.rotationSpeed = paddle1.speed * paddle1.direction;
+    paddle1.swinging = true;
+  }
+  if (key == 'z' || key == 's' || key == 'd') {
+    paddle2.sprite.rotationSpeed = paddle2.speed * paddle2.direction;
+    paddle1.swinging = true;
+  }
+  if (key == 'k' || keyCode == LEFT_ARROW || keyCode == UP_ARROW) {
+    paddle3.sprite.rotationSpeed = paddle3.speed * paddle3.direction;
+    paddle1.swinging = true;
+  }
+  if (key == 'm' || keyCode == RIGHT_ARROW || keyCode == DOWN_ARROW) {
+    paddle4.sprite.rotationSpeed = paddle4.speed * paddle4.direction;
+    paddle1.swinging = true;
+  }
 }
 
 function keyReleased() {
-  if (key == 'a' || key == 'w') { paddle1.sprite.rotationSpeed = -paddle1.speed; }
-  if (key == 'z' || key == 's' || key == 'd') { paddle2.sprite.rotationSpeed = -paddle2.speed; }
-  if (key == 'k' || keyCode == LEFT_ARROW || keyCode == UP_ARROW) { paddle3.sprite.rotationSpeed = -paddle3.speed; }
-  if (key == 'm' || keyCode == RIGHT_ARROW || keyCode == DOWN_ARROW) { paddle4.sprite.rotationSpeed = -paddle4.speed; }
+  if (key == 'a' || key == 'w') {
+    paddle1.sprite.rotationSpeed = -paddle1.speed * paddle1.direction;
+    paddle1.swinging = false;
+  }
+  if (key == 'z' || key == 's' || key == 'd') {
+    paddle2.sprite.rotationSpeed = -paddle2.speed * paddle1.direction;
+    paddle2.swinging = false;
+  }
+  if (key == 'k' || keyCode == LEFT_ARROW || keyCode == UP_ARROW) {
+    paddle3.sprite.rotationSpeed = -paddle3.speed * paddle1.direction;
+    paddle3.swinging = false;
+  }
+  if (key == 'm' || keyCode == RIGHT_ARROW || keyCode == DOWN_ARROW) {
+    paddle4.sprite.rotationSpeed = -paddle4.speed * paddle1.direction;
+    paddle4.swinging = false;
+  }
 }
