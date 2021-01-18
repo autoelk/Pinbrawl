@@ -39,12 +39,12 @@ Ball.prototype = {
     if (this.score > 999) {
       this.score = 999;
     }
-  }
+  },
 
-  // resetball() {
-  //   this.sprite.x = width / 2;
-  //   this.sprite.y = 400;
-  //   this.sprite.setSpeed(0, 0);
-  //   this.score = 5;
-  // }
+  reset() {
+    this.sprite.x = width / 2;
+    this.sprite.y = height / 4;
+    this.sprite.setSpeed(0, 0);
+    this.score = 5;
+  }
 }
