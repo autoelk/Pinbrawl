@@ -5,7 +5,7 @@ let leftScore = 0, rightScore = 0;
 let song;
 let state;
 let menuSelection = 0;
-let menu = ["0player", "1player", "2player"];
+let menu = ["0player", "1player", "2player"]; // "guide"
 
 // Runs once before setup()
 function preload() {
@@ -25,16 +25,16 @@ function preload() {
   arrowDownImage = loadImage('assets/arrowDown.png');
 
 
-  soundFormats('mp3');
-  song = loadSound('assets/actualrealpinball.mp3');
+  // soundFormats('ogg', 'mp3');
+  // song = loadSound('assets/actualrealpinball.mp3');
 }
 
 // Runs once before draw()
 function setup() {
   createCanvas(800, 450);
 
-  // masterVolume(0.75);
-  song.loop();
+  // song.setVolume(0.5);
+  // song.loop();
 
   state = "menu" //used to tell when the game is over
 
@@ -69,7 +69,7 @@ function setup() {
 
 // Runs in a loop forever
 function draw() {
-  print(state);
+  // print(state);
   background(bg);
 
   if (state != "game over") {
@@ -87,7 +87,6 @@ function draw() {
     paddle4.bot();
   }
 
-  // paddles, ball, wall, and obstacles
   if (state != "game over") {
     paddle1.update();
     paddle2.update();
@@ -104,10 +103,9 @@ function draw() {
         }
       }
     })
-    drawSprites();
-  }
 
-  if (state != "game over") {
+    drawSprites();
+
     // Score Display
     fill(254, 205, 26);
     textFont(pixelFont, 28);
@@ -133,13 +131,25 @@ function draw() {
     }
     image(arrowImage, 530, 185 + 50 * menuSelection); // arrowDownImage
 
-    // controls
+    // control icons
     textAlign(CENTER)
     textSize(40);
     text("W", 200, 200);
     text("S", 200, 300);
     image(arrowUpImage, 580, 187);
     image(arrowDownImage, 580, 287);
+  }
+
+  // guide WIP
+  if (state == "guide") {
+    fill(color('rgba(0, 0, 0, 0.5)'));
+    rect(0, 0, width, height); // transparent background
+    fill(254, 205, 26);
+    textFont(pixelFont, 100);
+    textAlign(CENTER);
+    text("GUIDE", width / 2, 100);
+    // guide text
+    textSize(40);
   }
 
   if (state != "game over" && state != "menu" && (leftScore >= 999) || (rightScore >= 999)) {
@@ -180,6 +190,10 @@ function keyPressed() {
       paddle3.sprite.rotationSpeed = paddle3.speed * paddle3.direction;
       paddle3.swinging = true;
     }
+    if (state == "1player") {
+      paddle1.sprite.rotationSpeed = paddle1.speed * paddle1.direction;
+      paddle1.swinging = true;
+    }
     if (state == "menu") {
       menuSelection--;
       if (menuSelection < 0) {
@@ -191,6 +205,10 @@ function keyPressed() {
     if (state == "2player") {
       paddle4.sprite.rotationSpeed = paddle4.speed * paddle4.direction;
       paddle4.swinging = true;
+    }
+    if (state == "1player") {
+      paddle2.sprite.rotationSpeed = paddle2.speed * paddle2.direction;
+      paddle2.swinging = true;
     }
     if (state == "menu") {
       menuSelection++;
@@ -213,27 +231,38 @@ function keyPressed() {
 }
 
 function keyReleased() {
-  if (state == "2player" || state == "1player") {
-    if (key == 'a' || key == 'w') {
+  if (key == 'a' || key == 'w') {
+    if (state == "2player" || state == "1player") {
       paddle1.sprite.rotationSpeed = -paddle1.speed * paddle1.direction;
       paddle1.swinging = false;
     }
-    if (key == 'z' || key == 's' || key == 'd') {
+  }
+  if (key == 'z' || key == 's' || key == 'd') {
+    if (state == "2player" || state == "1player") {
       paddle2.sprite.rotationSpeed = -paddle2.speed * paddle2.direction;
       paddle2.swinging = false;
     }
   }
-  if (state == "2player") {
-    if (key == 'k' || keyCode == LEFT_ARROW || keyCode == UP_ARROW) {
+  if (key == 'k' || keyCode == LEFT_ARROW || keyCode == UP_ARROW) {
+    if (state == "2player") {
       paddle3.sprite.rotationSpeed = -paddle3.speed * paddle3.direction;
       paddle3.swinging = false;
     }
-    if (key == 'm' || keyCode == RIGHT_ARROW || keyCode == DOWN_ARROW) {
+    if (state == "1player") {
+      paddle1.sprite.rotationSpeed = -paddle1.speed * paddle1.direction;
+      paddle1.swinging = false;
+    }
+  }
+  if (key == 'm' || keyCode == RIGHT_ARROW || keyCode == DOWN_ARROW) {
+    if (state == "2player") {
       paddle4.sprite.rotationSpeed = -paddle4.speed * paddle4.direction;
       paddle4.swinging = false;
     }
+    if (state == "1player") {
+      paddle2.sprite.rotationSpeed = -paddle2.speed * paddle2.direction;
+      paddle2.swinging = false;
+    }
   }
-
 }
 
 function endScreen() {

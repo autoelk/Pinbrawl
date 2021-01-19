@@ -27,6 +27,7 @@ Paddle.prototype = {
   update() {
     // apply extra force if the paddle is currently swinging outwards
     if (ball.sprite.bounce(this.sprite) && this.swinging) {
+      // changing restitution does not appear to work for some reason
       ball.sprite.addSpeed(25, this.sprite.rotation - (90 * this.direction));
     }
     // stop the swing from going past its bounds
@@ -50,11 +51,13 @@ Paddle.prototype = {
         this.sprite.rotationSpeed = 0;
       }
     }
+    // stop the previous thing from causing the paddle to rapidly vibrate
     if (this.sprite.rotationSpeed == 0) {
       this.swinging = false;
     }
   },
   bot() {
+    // slower and slightly random swing speed for bot to simulate human behavior and allow time for ball to hit the paddle before the paddle completes its swing
     if (ball.sprite.overlap(this.detector)) {
       this.sprite.rotationSpeed = 2 / 3 * this.speed * this.direction + 2 * Math.random();
       this.swinging = true;

@@ -11,14 +11,9 @@ function Obstacle(score, image, shape, x, y, width, height = 0, rotation = 0) {
   this.sprite.addImage(image);
   this.sprite.rotation = rotation;
   this.sprite.immovable = true;
-  this.sprite.restitution = 5;
+  this.sprite.restitution = 5; // extra bounciness
   // this.sprite.debug = true;
-  
-
   
   this.score = score;
   obstacles.add(this.sprite);
-}
-
-Obstacle.prototype = {
 }
